@@ -77,7 +77,7 @@ const SearchPage = ({reassignToLibrary, whichShelfForBook}) =>
     return (
         <div className="search-books">
             <div className="search-books-bar">
-                <Link to='/'> Close Search Page</Link>
+                <Link to='/' className="close-search">Close Search Page</Link>
                 <div className="search-books-input-wrapper">
                     <input
                         type="text"
