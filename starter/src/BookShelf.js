@@ -1,5 +1,6 @@
 import Book from "./Book";
 import PropTypes from 'prop-types'
+import {bookDisplayName} from "./bookDisplayName";
 
 /**
  * @description UI for displaying one bookshelf
@@ -18,7 +19,7 @@ const BookShelf = ({booksList, reassignBook, inExistingShelf}) =>
 
     return (
         <div className='bookshelf'>
-            <h2 className='bookshelf-title'>{myShelfName}</h2>
+            <h2 className='bookshelf-title'>{bookDisplayName(myShelfName)}</h2>
             <div className='bookshelf-books'>
                 <ol className='books-grid'>
                     {

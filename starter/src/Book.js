@@ -44,6 +44,7 @@ const Book = ({shelfName, bookEntry, onMoveBook}) =>
     {
         bookEntry.authors = [''];
     }
+    console.log(`dialog shelf ref:${shelfName}`);
     return (
         <div className='book'>
             <div className='book-top'>

@@ -1,9 +1,10 @@
 import "./App.css";
-import { useState} from "react";
+import {useEffect, useState} from "react";
 
 import {Route, Routes} from "react-router-dom";
 import Library from "./Library";
 import SearchPage from "./SearchPage";
+import {getAll, update} from "./BooksAPI";
 
 /**
  * @description main react application.
@@ -12,6 +13,33 @@ import SearchPage from "./SearchPage";
 
 function App()
 {
+    let createEmptyShelves = () =>
+    {
+        let newShelves = [];
+        bareShelves.forEach((shelf) =>
+        {
+            newShelves.push(Object.assign(shelf));
+        });
+        return newShelves;
+    }
+    useEffect(() =>
+    {
+        // perform the initial loading of the book shelves.
+
+        let startShelves = createEmptyShelves();
+
+        getAll().then((books) =>
+        {
+            books.forEach((book) =>
+            {
+                // this call to reassignShelf updates startShelves with the
+                // book assignment.  But does not setShelves() until all the
+                // books are assigned.
+                reassignShelf('', book.shelf, book, startShelves);
+            })
+            setShelves(startShelves);
+        })
+    }, []);
     /**
      * find if a given book already exists in any of the bookshelves for the search
      * tool to show when a book is on a shelf.
@@ -20,6 +48,7 @@ function App()
      */
     const findBookInShelf = (bookID) =>
     {
+        console.log(`findBookInShelf:${bookID}`);
         let foundOnShelf = '';
         shelves.forEach((shelf) =>
         {
@@ -33,6 +62,7 @@ function App()
                 foundOnShelf = currentShelf
             }
         });
+        console.log(`found on shelf:${foundOnShelf}`);
         return foundOnShelf;
     };
 
@@ -52,6 +82,7 @@ function App()
             {
                 console.log(`book title:${book.id} `)
                 console.dir(book);
+
             })
         })
     }
@@ -65,13 +96,20 @@ function App()
      * @param oldShelf original shelf, if '', then don't attempt to remove.
      * @param newShelf new shelf of the move.
      * @param book the book object.
+     * @param library Optional name for temporary library when reloading all the shelves
+     * so that the shelves state is updated once for the next render.  When library
+     * is provided, then the reassignment is incrementally applied to the input library
+     * rather than creating a copy of the library and updating the shelves state with the library.
      */
-    const reassignShelf = (oldShelf, newShelf, book) =>
+    const reassignShelf = (oldShelf, newShelf, book, library) =>
     {
         // need to create a complete deep copy to assure the
         // setstate triggers new renders.
-        let newShelves = JSON.parse(JSON.stringify(shelves))
+        let newShelves = library ? library : JSON.parse(JSON.stringify(shelves));
 
+        // if an old bookshelf is given, the remove the book from oldShelf.
+        // if no old bookShelf is given (ie ''), then skip the removal as we
+        // are adding a new book from the db.
         if (oldShelf.length > 0)
         {
             let oldShelfIndex = newShelves.findIndex((currentShelf) =>
@@ -88,7 +126,7 @@ function App()
                 bookList.books.splice(oldBookIndex, 1);
             }
         }
-        // find book
+        // find what shelf the new book belongs on.
 
         let newShelfIndex = newShelves.findIndex((currentShelf) =>
         {
@@ -97,7 +135,19 @@ function App()
         if (newShelfIndex >= 0)
         {
             newShelves[newShelfIndex].books.push(book);
-            setShelves(newShelves);
+            if (!library)
+            {
+                // if we are not doing a reload, then update the db to reflect the
+                // new bookshelf assignment.
+                update(book, newShelf).then(() =>
+                {
+                    console.log('updated the book re-assignment to the db');
+                    setShelves(newShelves);
+                })
+            }
+        } else
+        {
+            console.error(`could not find a shelf of name:${newShelf}`)
         }
 
 
@@ -106,23 +156,23 @@ function App()
     // initial bookshelves
     let bareShelves = [
         {
-            shelfName: 'Want to Read',
+
+            shelfName: 'wantToRead',
             books: []
         },
         {
-            shelfName: 'Read',
+
+            shelfName: 'read',
             books: []
         },
         {
-            shelfName: 'Currently Reading',
+
+            shelfName: 'currentlyReading',
             books: []
         }
     ]
 
     const [shelves, setShelves] = useState(bareShelves);
-
-
-
 
 
     return (

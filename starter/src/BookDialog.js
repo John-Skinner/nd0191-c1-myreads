@@ -1,3 +1,15 @@
+
+import {
+    WantToReadDisplayName,
+    CurrentlyReadingDisplayName,
+    ReadDisplayName,
+    CurrentlyReadingInternalName,
+    WantToReadInternalName,
+    ReadInternalName,
+    NoneInternalName,
+    NoneDisplayName
+} from './bookDisplayName'
+
 /**
  * @description Displays the option to move the book to another bookshelf.
  * @param shelf Mark this shelf as the current shelf of the book
@@ -11,19 +23,22 @@ const BookDialog = ({shelf, onNewShelfSelected}) =>
         console.log(` item selected:${event.target.value}`);
         onNewShelfSelected(event.target.value);
     }
+    console.log(`book dialog assigned to shelf:${shelf}`);
+    let shelfValue = shelf ? shelf : "new";
+
 
     return (
         <div className="book-shelf-changer">
-            <select onChange={itemSelected} value={shelf}>
+            <select onChange={itemSelected} value={shelfValue}>
                 <option value="new" disabled>
-                    Move to... In Container
+                    add to ...
                 </option>
-                <option id='selectorOption' value="Currently Reading">
-                    Currently Reading
+                <option id='selectorOption' value={CurrentlyReadingInternalName}>
+                    {CurrentlyReadingDisplayName}
                 </option>
-                <option value="Want to Read">Want to Read</option>
-                <option value="Read">Read</option>
-                <option value="none">None</option>
+                <option value={WantToReadInternalName}>{WantToReadDisplayName}</option>
+                <option value={ReadInternalName}>{ReadDisplayName}</option>
+                <option value={NoneInternalName}>{NoneDisplayName}</option>
             </select>
         </div>
     )

@@ -48,7 +48,7 @@ const SearchPage = ({reassignToLibrary, whichShelfForBook}) =>
                         console.log('matches found')
 
                         shelvedResult = {
-                            shelfName: 'new',
+                            shelfDisplayName: 'new',
                             books: result
                         }
                     }
