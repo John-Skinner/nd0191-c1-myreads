@@ -1,4 +1,3 @@
-
 import {
     WantToReadDisplayName,
     CurrentlyReadingDisplayName,
@@ -20,11 +19,10 @@ const BookDialog = ({shelf, onNewShelfSelected}) =>
 {
     const itemSelected = (event) =>
     {
-        console.log(` item selected:${event.target.value}`);
         onNewShelfSelected(event.target.value);
     }
-    console.log(`book dialog assigned to shelf:${shelf}`);
-    let shelfValue = shelf ? shelf : "new";
+
+    let shelfValue = shelf ? shelf : NoneInternalName;
 
 
     return (

@@ -1,4 +1,3 @@
-
 import BookDialog from "./BookDialog";
 
 /**
@@ -44,7 +43,17 @@ const Book = ({shelfName, bookEntry, onMoveBook}) =>
     {
         bookEntry.authors = [''];
     }
-    console.log(`dialog shelf ref:${shelfName}`);
+    let authorsList = '';
+    bookEntry.authors.forEach((author) =>
+    {
+        if (authorsList.length === 0)
+        {
+            authorsList = author;
+        } else
+        {
+            authorsList = authorsList + ', ' + author;
+        }
+    })
     return (
         <div className='book'>
             <div className='book-top'>
@@ -62,8 +71,7 @@ const Book = ({shelfName, bookEntry, onMoveBook}) =>
             </div>
             <div className='book-authors'>
                 {
-
-                    bookEntry.authors[0]
+                    authorsList
                 }
             </div>
         </div>

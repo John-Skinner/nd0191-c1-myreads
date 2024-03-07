@@ -6,8 +6,10 @@ import PropTypes from "prop-types";
 
 /**
  * @description UI for the search based on subsequence of chars.
+
  * @param reassignToLibrary utility to move book to shelves. Used to move a book from db to the library.
  * @param whichShelfForBook utility to find if a book already exists in the library.
+
 
  */
 const SearchPage = ({reassignToLibrary, whichShelfForBook}) =>
@@ -24,10 +26,9 @@ const SearchPage = ({reassignToLibrary, whichShelfForBook}) =>
     const [matches, setMatches] = useState(emptyShelves);
     useEffect(() =>
     {
+        console.log('--------- App useEffect called')
         try
         {
-
-            console.log(`try searching for ${searchString}`);
             if (searchString.length > 0)
             {
                 search(searchString, 20).then((result) =>
@@ -56,6 +57,12 @@ const SearchPage = ({reassignToLibrary, whichShelfForBook}) =>
                 }).catch((reason) =>
                 {
                     console.error(`Error in fetch reason:${reason}`);
+                });
+            } else
+            {
+                setMatches({
+                    shelfName: 'new',
+                    books: []
                 });
             }
 

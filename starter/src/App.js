@@ -24,7 +24,7 @@ function App()
     }
     useEffect(() =>
     {
-        // perform the initial loading of the book shelves.
+        // perform the initial loading of the bookshelves.
 
         let startShelves = createEmptyShelves();
 
@@ -48,7 +48,6 @@ function App()
      */
     const findBookInShelf = (bookID) =>
     {
-        console.log(`findBookInShelf:${bookID}`);
         let foundOnShelf = '';
         shelves.forEach((shelf) =>
         {
@@ -62,7 +61,6 @@ function App()
                 foundOnShelf = currentShelf
             }
         });
-        console.log(`found on shelf:${foundOnShelf}`);
         return foundOnShelf;
     };
 
@@ -178,8 +176,11 @@ function App()
     return (
         <Routes>
             <Route exact path='/' element={<Library shelves={shelves} reassignShelf={reassignShelf}/>}/>
-            <Route exact path='/search' element={<SearchPage reassignToLibrary={reassignShelf}
-                                                             whichShelfForBook={findBookInShelf}></SearchPage>}/>
+            <Route exact path='/search'
+                   element={<SearchPage reassignToLibrary={reassignShelf}
+                                        whichShelfForBook={findBookInShelf}>
+
+                   </SearchPage>}/>
         </Routes>
 
     );

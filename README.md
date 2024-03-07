@@ -36,4 +36,18 @@ Updated to call `getAll()` from `useEffects` within  `App`, and set each book on
 Note: I can add books from the search page but books should be fetched on the launch of the application BooksAPI.getAll server endpoint.
 See attached:
 ```
+# Third Submission notes
+```
+Multiple authors are not displayed for books with it.
+```
+Fixed by assembling a string that lists all the authors and referencing the assembled string in the virtual dom tree.
+```angular2html
+The prior search results are shown. Books are shown when all text is deleted from the search input box.
+```
+Fixed by adding an else clause that still updates the search string state (setMatches) when the search string 
+length is 0.
+```angular2html
+The "None" option is NOT selected if a book has not been assigned to a shelf.
+```
+Fix made to BookDialog.js by setting the select's value to None when the shelf name property is undefined.
 
